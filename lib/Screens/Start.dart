@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gradient_text/flutter_gradient_text.dart';
+// import 'package:flutter_gradient_text/flutter_gradient_text.dart';
 
 import 'login.dart';
-// import 'package:simple_gradient_text/simple_gradient_text.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class Start extends StatefulWidget {
   const Start({super.key});
-
+  
   @override
   State<Start> createState() => _StartState();
 }
@@ -24,10 +24,11 @@ class _StartState extends State<Start> {
               height: 20,
             ),
             GradientText(
-              Text("ToDoIst",
-                  style: TextStyle(fontSize: 90, fontWeight: FontWeight.bold)),
-              colors: [Colors.black, Colors.black26, Colors.black12],
-              stops: [0, 0.5, 1],
+              'ToDoIst',
+              style: TextStyle(fontSize: 90, fontWeight: FontWeight.bold),
+              gradientDirection: GradientDirection.ttb,
+              colors: const [Colors.black, Colors.white],
+              stops: [0, 1],
             ),
             Text("Bienvenue sur cette application de  gestion des taches",
                 textAlign: TextAlign.center,
