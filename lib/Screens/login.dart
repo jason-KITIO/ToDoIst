@@ -10,6 +10,13 @@ class login extends StatefulWidget {
 class _loginState extends State<login> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Autre page'),
+      ),
+      body: Center(
+        child: Text('Bienvenue sur l\'autre page!'),
+      ),
+    );
   }
 }
