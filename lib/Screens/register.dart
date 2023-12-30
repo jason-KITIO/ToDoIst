@@ -1,34 +1,44 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradient_text/flutter_gradient_text.dart';
-import 'package:todoist/Screens/home.dart';
-import 'package:todoist/Screens/register.dart';
+import 'package:todoist/Screens/login.dart';
 
-import 'Start.dart';
-
-class login extends StatefulWidget {
-  const login({super.key});
+class register extends StatefulWidget {
+  const register({super.key});
 
   @override
-  State<login> createState() => _loginState();
+  State<register> createState() => _registerState();
 }
 
-class _loginState extends State<login> {
+class _registerState extends State<register> {
   final _emailController = TextEditingController();
   final _passwwordController = TextEditingController();
-
-  Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _passwwordController.text.trim(),
-    );
-  }
+  final _passwordControllerConfirm = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwwordController.dispose();
+    _passwordControllerConfirm.dispose();
     super.dispose();
+  }
+
+  Future signUp() async {
+    if (passwordConfirmed()) {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwwordController.text.trim(),
+      );
+    }
+  }
+
+  bool passwordConfirmed() {
+    if (_passwwordController.text.trim() ==
+        _passwordControllerConfirm.text.trim()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -38,17 +48,13 @@ class _loginState extends State<login> {
         child: Center(
           child: SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              // mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: 1,
-                ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
                 Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       GradientText(
-                        Text("Login",
+                        Text("Sign up",
                             style: TextStyle(
                                 fontSize: 90, fontWeight: FontWeight.bold)),
                         colors: [
@@ -59,7 +65,7 @@ class _loginState extends State<login> {
                         stops: [0, 0.5, 1],
                       ),
                       GradientText(
-                        Text("Welcome Back",
+                        Text("Welcome",
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold)),
                         colors: [
@@ -163,12 +169,56 @@ class _loginState extends State<login> {
                         ),
                       ),
                       SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                              width: 1,
+                              strokeAlign: BorderSide.strokeAlignOutside,
+                              color:
+                                  Colors.black.withOpacity(0.20000000298023224),
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          shadows: [
+                            BoxShadow(
+                              color: Color(0x3F283576),
+                              blurRadius: 10,
+                              offset: Offset(10, 14),
+                              spreadRadius: 0,
+                            )
+                          ],
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Colors.grey.shade200))),
+                              child: TextField(
+                                obscureText: true,
+                                controller: _passwordControllerConfirm,
+                                decoration: InputDecoration(
+                                    hintText: "Confirm password",
+                                    hintStyle: TextStyle(color: Colors.grey),
+                                    border: InputBorder.none),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
                         height: 50,
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: GestureDetector(
-                          onTap: signIn,
+                          onTap: signUp,
                           child: Container(
                             height: 50,
                             decoration: BoxDecoration(
@@ -177,7 +227,7 @@ class _loginState extends State<login> {
                             ),
                             child: Center(
                               child: Text(
-                                "Sign in",
+                                "Sign up",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
@@ -188,7 +238,7 @@ class _loginState extends State<login> {
                         ),
                       ),
                       SizedBox(
-                        height: 60,
+                        height: 20,
                       ),
                       Text(
                         "Continue with social media",
@@ -267,11 +317,11 @@ class _loginState extends State<login> {
                             //crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                "J’ai pas encore de compte ",
+                                "J’ai deja un compte ",
                                 style: TextStyle(color: Colors.grey),
                               ),
                               Text(
-                                "Creer un compte",
+                                "se connecter",
                                 style: TextStyle(color: Colors.blue),
                               ),
                             ],
@@ -279,29 +329,13 @@ class _loginState extends State<login> {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                  builder: (context) => register()),
+                              MaterialPageRoute(builder: (context) => login()),
                             );
                           },
                         )),
                       ),
-                      /* Center(
-                      child: ElevatedButton(
-                        child: Text('Ouvrir une autre page'),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NouvellePage()),
-                          );
-                        },
-                      ),
-                    ),*/
                     ],
                   ),
-                ),
-                SizedBox(
-                  height: 30,
                 ),
               ],
             ),

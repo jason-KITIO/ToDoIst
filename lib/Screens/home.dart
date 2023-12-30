@@ -14,19 +14,23 @@ class _homeState extends State<home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('l\'utilisateur connecter a pour email : ' + user.email!),
-          MaterialButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-            },
-            color: Color(0x3F283576),
-            child: Text('Sign Out'),
-          )
-        ],
+        body: SafeArea(
+      child: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('l\'utilisateur connecter a pour email : ' + user.email!),
+              MaterialButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                },
+                color: Color(0x3F283576),
+                child: Text('Sign Out'),
+              )
+            ],
+          ),
+        ),
       ),
     ));
   }
