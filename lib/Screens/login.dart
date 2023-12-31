@@ -4,6 +4,7 @@ import 'package:flutter_gradient_text/flutter_gradient_text.dart';
 import 'package:todoist/Screens/home.dart';
 import 'package:todoist/Screens/register.dart';
 
+import 'ForgetPassword.dart';
 import 'Start.dart';
 
 class login extends StatefulWidget {
@@ -18,10 +19,23 @@ class _loginState extends State<login> {
   final _passwwordController = TextEditingController();
 
   Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _passwwordController.text.trim(),
-    );
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwwordController.text.trim(),
+      );
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text("Nous recontrons un probleme de Connection\n"
+                  "  - Veillez vous rassurer d'avoir remplit tous les champs\n\n"
+                  "                     Merci de coopération "),
+            );
+          });
+    }
   }
 
   @override
@@ -157,6 +171,36 @@ class _loginState extends State<login> {
                                     hintText: "Password",
                                     hintStyle: TextStyle(color: Colors.grey),
                                     border: InputBorder.none),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return ForgetPassword();
+                                    },
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                'Mots de passe oublier ? ',
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             )
                           ],

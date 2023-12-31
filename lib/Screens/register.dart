@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradient_text/flutter_gradient_text.dart';
 import 'package:todoist/Screens/login.dart';
+import 'package:todoist/Screens/register/register1.dart';
 
 class register extends StatefulWidget {
   const register({super.key});
@@ -23,13 +24,33 @@ class _registerState extends State<register> {
     super.dispose();
   }
 
-  Future signUp() async {
-    if (passwordConfirmed()) {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwwordController.text.trim(),
-      );
+  Future signUp1() async {
+    try {
+      if (passwordConfirmed()) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwwordController.text.trim(),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text("Nous recontrons un probleme de Connection\n"
+                  "  - Veillez vous rassurer d'avoir remplit tous les champs\n\n"
+                  "                     Merci de coopération "),
+            );
+          });
     }
+  }
+
+  void signUp() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => register1()),
+    );
   }
 
   bool passwordConfirmed() {
