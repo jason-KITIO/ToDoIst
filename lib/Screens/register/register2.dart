@@ -73,28 +73,14 @@ class _register2State extends State<register2> {
                   child: GestureDetector(
                     //onTap: Foget,
                     child: Center(
-                      child: Image(
-                        image: AssetImage('assets/logo.png'),
-                        width: 200,
-                        height: 200,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 10.0,
-                  ),
-                  child: GestureDetector(
-                    //onTap: Foget,
-                    child: Center(
+                        child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
                       child: Image(
                         image: AssetImage('assets/pp.jpg'),
                         width: 200,
                         height: 200,
                       ),
-                    ),
+                    )),
                   ),
                 ),
               ],
