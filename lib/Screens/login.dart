@@ -179,7 +179,7 @@ class _loginState extends State<login> {
                                       bottom: BorderSide(
                                           color: Colors.grey.shade200))),
                               child: TextField(
-                                obscureText: true,
+                                obscureText: obscureText,
                                 controller: _passwwordController,
                                 decoration: InputDecoration(
                                   labelText: 'Password',

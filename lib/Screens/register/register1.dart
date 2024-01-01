@@ -21,6 +21,19 @@ class _register1State extends State<register1> {
     );
   }
 
+  // Crée l'état du widget
+  bool obscureText = true; // Définit la valeur de obscureText
+  bool checkboxValue = false; // Définit la valeur du checkbox
+
+  void toggleObscureText() {
+    // Définit la fonction qui change la valeur de obscureText
+    setState(() {
+      // Notifie le framework que l'état a changé
+      obscureText = !obscureText; // Inverse la valeur de obscureText
+      checkboxValue = !checkboxValue; // Inverse la valeur du checkbox
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,7 +123,8 @@ class _register1State extends State<register1> {
                                 child: TextField(
                                   //controller: _emailController,
                                   decoration: InputDecoration(
-                                      hintText: "Email",
+                                      labelText: 'Nom et prenom',
+                                      hintText: "Jason Kitio",
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder.none),
                                 ),
@@ -151,12 +165,13 @@ class _register1State extends State<register1> {
                                         bottom: BorderSide(
                                             color: Colors.grey.shade200))),
                                 child: TextField(
-                                  obscureText: true,
                                   //controller: _passwwordController,
                                   decoration: InputDecoration(
-                                      hintText: "Password",
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      border: InputBorder.none),
+                                    labelText: 'Username',
+                                    hintText: "Username",
+                                    hintStyle: TextStyle(color: Colors.grey),
+                                    border: InputBorder.none,
+                                  ),
                                 ),
                               )
                             ],

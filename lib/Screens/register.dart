@@ -24,12 +24,16 @@ class _registerState extends State<register> {
     super.dispose();
   }
 
-  Future signUp1() async {
+  Future signUp() async {
     try {
       if (passwordConfirmed()) {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwwordController.text.trim(),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => register1()),
         );
       }
     } on FirebaseAuthException catch (e) {
@@ -46,7 +50,7 @@ class _registerState extends State<register> {
     }
   }
 
-  void signUp() {
+  void signUp1() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => register1()),
@@ -126,7 +130,7 @@ class _registerState extends State<register> {
                               width: 1,
                               strokeAlign: BorderSide.strokeAlignOutside,
                               color:
-                                  Colors.black.withOpacity(0.20000000298023224),
+                              Colors.black.withOpacity(0.20000000298023224),
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -170,7 +174,7 @@ class _registerState extends State<register> {
                               width: 1,
                               strokeAlign: BorderSide.strokeAlignOutside,
                               color:
-                                  Colors.black.withOpacity(0.20000000298023224),
+                              Colors.black.withOpacity(0.20000000298023224),
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -192,7 +196,7 @@ class _registerState extends State<register> {
                                       bottom: BorderSide(
                                           color: Colors.grey.shade200))),
                               child: TextField(
-                                obscureText: true,
+                                obscureText: obscureText,
                                 controller: _passwwordController,
                                 decoration: InputDecoration(
                                   labelText: 'Password',
@@ -208,7 +212,7 @@ class _registerState extends State<register> {
                                           : Icons.visibility_off,
                                     ),
                                     onPressed:
-                                        toggleObscureText, // Qui appelle la fonction toggleObscureText quand on appuie dessus
+                                    toggleObscureText, // Qui appelle la fonction toggleObscureText quand on appuie dessus
                                   ),
                                 ),
                               ),
@@ -227,7 +231,7 @@ class _registerState extends State<register> {
                               width: 1,
                               strokeAlign: BorderSide.strokeAlignOutside,
                               color:
-                                  Colors.black.withOpacity(0.20000000298023224),
+                              Colors.black.withOpacity(0.20000000298023224),
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -249,7 +253,7 @@ class _registerState extends State<register> {
                                       bottom: BorderSide(
                                           color: Colors.grey.shade200))),
                               child: TextField(
-                                obscureText: true,
+                                obscureText: obscureText,
                                 controller: _passwordControllerConfirm,
                                 decoration: InputDecoration(
                                   labelText: 'Confirm password',
@@ -265,7 +269,7 @@ class _registerState extends State<register> {
                                           : Icons.visibility_off,
                                     ),
                                     onPressed:
-                                        toggleObscureText, // Qui appelle la fonction toggleObscureText quand on appuie dessus
+                                    toggleObscureText, // Qui appelle la fonction toggleObscureText quand on appuie dessus
                                   ),
                                 ),
                               ),
@@ -368,32 +372,33 @@ class _registerState extends State<register> {
                       ),*/
                         child: Center(
                             child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            //primary: Colors.transparent,
-                            backgroundColor: Colors.white,
-                            shadowColor: Colors.transparent,
-                            //onPrimary: Colors.orange.shade900,
-                          ),
-                          child: Column(
-                            //crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "J’ai deja un compte ",
-                                style: TextStyle(color: Colors.grey),
+                              style: ElevatedButton.styleFrom(
+                                //primary: Colors.transparent,
+                                backgroundColor: Colors.white,
+                                shadowColor: Colors.transparent,
+                                //onPrimary: Colors.orange.shade900,
                               ),
-                              Text(
-                                "se connecter",
-                                style: TextStyle(color: Colors.blue),
+                              child: Column(
+                                //crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    "J’ai deja un compte ",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                  Text(
+                                    "se connecter",
+                                    style: TextStyle(color: Colors.blue),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => login()),
-                            );
-                          },
-                        )),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => login()),
+                                );
+                              },
+                            )),
                       ),
                     ],
                   ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:todoist/Screens/Start.dart';
+import 'package:todoist/Screens/register/register1.dart';
 import 'package:todoist/Screens/register/register3.dart';
 
 import '../model/add_date.dart';
@@ -45,7 +46,7 @@ class _homeState extends State<home> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return Start();
+                              return register1();
                             },
                           ),
                         );
@@ -58,6 +59,31 @@ class _homeState extends State<home> {
                         ),
                       ),
                     )
+                  ],
+                ),
+              ),
+              Center(
+                // Un widget Stack permet de superposer un widget sur un autre
+                child: Stack(
+                  // L'alignement des widgets dans le stack
+                  alignment: Alignment.center,
+                  // La liste des widgets à afficher dans le stack
+                  children: <Widget>[
+                    // Le premier widget est en bas du stack
+                    // Vous pouvez utiliser Image.asset pour charger une image locale
+                    // Ou Image.network pour charger une image depuis une URL
+                    Image.asset('assets/pp.jpg'),
+                    // Le deuxième widget est au-dessus du premier
+                    // Vous pouvez utiliser Positioned pour positionner le widget dans le stack
+                    Positioned(
+                      // La position du widget par rapport au centre du stack
+                      // Vous pouvez utiliser des valeurs positives ou négatives
+                      left: 50,
+                      top: 50,
+                      // Le widget à positionner
+                      // Vous pouvez utiliser Image.asset ou Image.network comme avant
+                      child: Image.asset('assets/pp.jpg'),
+                    ),
                   ],
                 ),
               ),
