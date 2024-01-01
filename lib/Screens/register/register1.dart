@@ -192,7 +192,8 @@ class _register1State extends State<register1> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 25.0, vertical: 15.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -208,9 +209,9 @@ class _register1State extends State<register1> {
                           );
                         },
                         child: Text(
-                          'Mots de passe oublier ? ',
+                          'Back',
                           style: TextStyle(
-                            color: Colors.blue,
+                            color: Colors.grey,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

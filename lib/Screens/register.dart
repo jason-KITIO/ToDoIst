@@ -62,6 +62,19 @@ class _registerState extends State<register> {
     }
   }
 
+  // Crée l'état du widget
+  bool obscureText = true; // Définit la valeur de obscureText
+  bool checkboxValue = false; // Définit la valeur du checkbox
+
+  void toggleObscureText() {
+    // Définit la fonction qui change la valeur de obscureText
+    setState(() {
+      // Notifie le framework que l'état a changé
+      obscureText = !obscureText; // Inverse la valeur de obscureText
+      checkboxValue = !checkboxValue; // Inverse la valeur du checkbox
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +111,7 @@ class _registerState extends State<register> {
                       ),
                     ]),
                 SizedBox(
-                  height: 50,
+                  height: 25,
                 ),
                 Padding(
                   padding: EdgeInsets.all(20),
@@ -137,6 +150,7 @@ class _registerState extends State<register> {
                               child: TextField(
                                 controller: _emailController,
                                 decoration: InputDecoration(
+                                    labelText: 'Email',
                                     hintText: "Email",
                                     hintStyle: TextStyle(color: Colors.grey),
                                     border: InputBorder.none),
@@ -181,9 +195,22 @@ class _registerState extends State<register> {
                                 obscureText: true,
                                 controller: _passwwordController,
                                 decoration: InputDecoration(
-                                    hintText: "Password",
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    border: InputBorder.none),
+                                  labelText: 'Password',
+                                  hintText: "Password",
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  border: InputBorder.none,
+                                  suffixIcon: IconButton(
+                                    // Avec une icône
+                                    icon: Icon(
+                                      // Qui affiche un œil ouvert ou fermé selon la valeur de obscureText
+                                      obscureText
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                    ),
+                                    onPressed:
+                                        toggleObscureText, // Qui appelle la fonction toggleObscureText quand on appuie dessus
+                                  ),
+                                ),
                               ),
                             )
                           ],
@@ -225,9 +252,22 @@ class _registerState extends State<register> {
                                 obscureText: true,
                                 controller: _passwordControllerConfirm,
                                 decoration: InputDecoration(
-                                    hintText: "Confirm password",
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    border: InputBorder.none),
+                                  labelText: 'Confirm password',
+                                  hintText: "Confirm password",
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  border: InputBorder.none,
+                                  suffixIcon: IconButton(
+                                    // Avec une icône
+                                    icon: Icon(
+                                      // Qui affiche un œil ouvert ou fermé selon la valeur de obscureText
+                                      obscureText
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                    ),
+                                    onPressed:
+                                        toggleObscureText, // Qui appelle la fonction toggleObscureText quand on appuie dessus
+                                  ),
+                                ),
                               ),
                             )
                           ],
