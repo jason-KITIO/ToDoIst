@@ -36,9 +36,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Bottom Navigation Bar'),
-      ),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         // La couleur de fond de la barre de navigation
