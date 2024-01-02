@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradient_text/flutter_gradient_text.dart';
@@ -27,10 +28,17 @@ class _registerState extends State<register> {
   Future signUp() async {
     try {
       if (passwordConfirmed()) {
+        //creer un users
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwwordController.text.trim(),
         );
+/*
+        //ajouter l'email comme donnes
+        addUserDetails(
+          _emailController.text.trim(),
+        );
+*/
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => register1()),
@@ -48,6 +56,14 @@ class _registerState extends State<register> {
             );
           });
     }
+  }
+
+  Future addUserDetails(
+    String email,
+  ) async {
+    await FirebaseFirestore.instance.collection('Users').add({
+      'Email': email,
+    });
   }
 
   void signUp1() {
@@ -130,7 +146,7 @@ class _registerState extends State<register> {
                               width: 1,
                               strokeAlign: BorderSide.strokeAlignOutside,
                               color:
-                              Colors.black.withOpacity(0.20000000298023224),
+                                  Colors.black.withOpacity(0.20000000298023224),
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -174,7 +190,7 @@ class _registerState extends State<register> {
                               width: 1,
                               strokeAlign: BorderSide.strokeAlignOutside,
                               color:
-                              Colors.black.withOpacity(0.20000000298023224),
+                                  Colors.black.withOpacity(0.20000000298023224),
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -212,7 +228,7 @@ class _registerState extends State<register> {
                                           : Icons.visibility_off,
                                     ),
                                     onPressed:
-                                    toggleObscureText, // Qui appelle la fonction toggleObscureText quand on appuie dessus
+                                        toggleObscureText, // Qui appelle la fonction toggleObscureText quand on appuie dessus
                                   ),
                                 ),
                               ),
@@ -231,7 +247,7 @@ class _registerState extends State<register> {
                               width: 1,
                               strokeAlign: BorderSide.strokeAlignOutside,
                               color:
-                              Colors.black.withOpacity(0.20000000298023224),
+                                  Colors.black.withOpacity(0.20000000298023224),
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -269,7 +285,7 @@ class _registerState extends State<register> {
                                           : Icons.visibility_off,
                                     ),
                                     onPressed:
-                                    toggleObscureText, // Qui appelle la fonction toggleObscureText quand on appuie dessus
+                                        toggleObscureText, // Qui appelle la fonction toggleObscureText quand on appuie dessus
                                   ),
                                 ),
                               ),
@@ -372,33 +388,32 @@ class _registerState extends State<register> {
                       ),*/
                         child: Center(
                             child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                //primary: Colors.transparent,
-                                backgroundColor: Colors.white,
-                                shadowColor: Colors.transparent,
-                                //onPrimary: Colors.orange.shade900,
+                          style: ElevatedButton.styleFrom(
+                            //primary: Colors.transparent,
+                            backgroundColor: Colors.white,
+                            shadowColor: Colors.transparent,
+                            //onPrimary: Colors.orange.shade900,
+                          ),
+                          child: Column(
+                            //crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "J’ai deja un compte ",
+                                style: TextStyle(color: Colors.grey),
                               ),
-                              child: Column(
-                                //crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    "J’ai deja un compte ",
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                  Text(
-                                    "se connecter",
-                                    style: TextStyle(color: Colors.blue),
-                                  ),
-                                ],
+                              Text(
+                                "se connecter",
+                                style: TextStyle(color: Colors.blue),
                               ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => login()),
-                                );
-                              },
-                            )),
+                            ],
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => login()),
+                            );
+                          },
+                        )),
                       ),
                     ],
                   ),

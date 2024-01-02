@@ -1,96 +1,126 @@
 import 'package:flutter/material.dart';
 
-import 'home.dart';
+import 'GUI/HomeUsers.dart';
+import 'GUI/home.dart';
 
-class route extends StatefulWidget {
-  const route({Key? key}) : super(key: key);
-
-  @override
-  State<route> createState() => _BottomState();
+void main() {
+  runApp(route());
 }
 
-class _BottomState extends State<route> {
-  int index_color = 0;
-  List Screen = [
+class route extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Bottom Navigation Bar',
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _currentIndex = 0;
+
+  final List<Widget> _pages = [
     home(),
     home(),
     home(),
     home(),
+    HomeUsers(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Screen[index_color],
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => home()));
+      appBar: AppBar(
+        title: Text('Bottom Navigation Bar'),
+      ),
+      body: _pages[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        // La couleur de fond de la barre de navigation
+        backgroundColor: Colors.blue,
+        // La couleur des éléments sélectionnés
+        selectedItemColor: Colors.blue,
+        // La couleur des éléments non sélectionnés
+        unselectedItemColor: Color(0xFFADADAD),
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
         },
-        child: Icon(Icons.add),
-        backgroundColor: Color(0xff368983),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 7.5, bottom: 7.5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    index_color = 0;
-                  });
-                },
-                child: Icon(
-                  Icons.home,
-                  size: 30,
-                  color: index_color == 0 ? Color(0xff368983) : Colors.grey,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    index_color = 1;
-                  });
-                },
-                child: Icon(
-                  Icons.search,
-                  size: 30,
-                  color: index_color == 1 ? Color(0xff368983) : Colors.grey,
-                ),
-              ),
-              SizedBox(width: 10),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    index_color = 2;
-                  });
-                },
-                child: Icon(
-                  Icons.shopping_bag,
-                  size: 30,
-                  color: index_color == 2 ? Color(0xff368983) : Colors.grey,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    index_color = 3;
-                  });
-                },
-                child: Icon(
-                  Icons.person_outlined,
-                  size: 30,
-                  color: index_color == 3 ? Color(0xff368983) : Colors.grey,
-                ),
-              ),
-            ],
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
           ),
-        ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            label: 'Ajouter',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'shopping cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'User',
+          ),
+        ],
       ),
+    );
+  }
+}
+
+class Page1 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Page 1'),
+    );
+  }
+}
+
+class Page2 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Page 2'),
+    );
+  }
+}
+
+class Page3 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Page 3'),
+    );
+  }
+}
+
+class Page4 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Page 4'),
+    );
+  }
+}
+
+class Page5 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Page 5'),
     );
   }
 }

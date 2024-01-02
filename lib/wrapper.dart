@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:todoist/Screens/Start2.dart';
 
 import 'Screens/Start.dart';
-import 'Screens/home.dart';
+import 'Screens/GUI/HomeUsers.dart';
 import 'Screens/login.dart';
 import 'Screens/route.dart';
 

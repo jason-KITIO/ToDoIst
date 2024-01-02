@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:todoist/Screens/home.dart';
+import 'package:todoist/Screens/GUI/HomeUsers.dart';
 import 'package:todoist/Screens/login.dart';
 import 'package:todoist/Screens/register/register2.dart';
 
@@ -13,9 +13,16 @@ class register3 extends StatefulWidget {
 
 class _register3State extends State<register3> {
   void suivant() {
+    /*progress bar
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Center(child: CircularProgressIndicator());
+        });
+    Navigator.of(context).pop();*/
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => login()),
+      MaterialPageRoute(builder: (context) => HomeUsers()),
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -5,90 +6,262 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:todoist/Screens/Start.dart';
 import 'package:todoist/Screens/register/register1.dart';
 import 'package:todoist/Screens/register/register3.dart';
+import 'package:todoist/read%20data/get_user_name.dart';
 
-import '../model/add_date.dart';
+import '../../model/add_date.dart';
 
-class home extends StatefulWidget {
-  const home({super.key});
+class HomeUsers extends StatefulWidget {
+  const HomeUsers({super.key});
 
   @override
-  State<home> createState() => _homeState();
+  State<HomeUsers> createState() => _homeState();
 }
 
-class _homeState extends State<home> {
+class _homeState extends State<HomeUsers> {
   final user = FirebaseAuth.instance.currentUser!;
 
+  List<String> docIds = [];
+
+  Future getDocId() async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .get()
+        .then((snapshot) => snapshot.docs.forEach((element) {
+              print(element.reference);
+              docIds.add(element.reference.id);
+            }));
+  }
+
+/*
+  @override
+  void initState() {
+    getDocId();
+    super.initState();
+  }
+*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        /*appBar: AppBar(
+          title: Text(user.email!),
+          actions: [
+            GestureDetector(
+              onTap: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Start()),
+                );
+              },
+              child: Icon(Icons.logout_outlined),
+            )
+          ],
+        ),*/
         body: SafeArea(
-      child: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('l\'utilisateur connecter a pour email : ' + user.email!),
-              MaterialButton(
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
-                },
-                color: Color(0x3F283576),
-                child: Text('Sign Out'),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return register1();
-                            },
+      child: Expanded(
+        child: Column(
+          children: [
+            /*Text('l\'utilisateur connecter a pour email : ' + user.email!),
+                MaterialButton(
+                  onPressed: () {
+                    FirebaseAuth.instance.signOut();
+                  },
+                  color: Color(0x3F283576),
+                  child: Text('Sign Out'),
+                ),
+                Expanded(
+                    child: FutureBuilder(
+                  future: getDocId(),
+                  builder: (context, snapshot) {
+                    return ListView.builder(
+                      //itemCount: 2,
+                      itemCount: docIds.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            title: GetUserName(documentId: docIds[index]),
+                            tileColor: Colors.grey.shade100,
                           ),
                         );
                       },
-                      child: Text(
-                        'Back',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
+                    );
+                  },
+                )),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return register1();
+                              },
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Back',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),*/
+
+            Container(
+              //color: Colors.red,
+              child: Stack(
+                // L'alignement des widgets dans le stack
+                alignment: Alignment.center,
+                // La liste des widgets à afficher dans le stack
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 90.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/bg.png'),
+                          fit: BoxFit.cover,
                         ),
                       ),
-                    )
-                  ],
-                ),
-              ),
-              Center(
-                // Un widget Stack permet de superposer un widget sur un autre
-                child: Stack(
-                  // L'alignement des widgets dans le stack
-                  alignment: Alignment.center,
-                  // La liste des widgets à afficher dans le stack
-                  children: <Widget>[
-                    // Le premier widget est en bas du stack
-                    // Vous pouvez utiliser Image.asset pour charger une image locale
-                    // Ou Image.network pour charger une image depuis une URL
-                    Image.asset('assets/pp.jpg'),
-                    // Le deuxième widget est au-dessus du premier
-                    // Vous pouvez utiliser Positioned pour positionner le widget dans le stack
-                    Positioned(
-                      // La position du widget par rapport au centre du stack
-                      // Vous pouvez utiliser des valeurs positives ou négatives
-                      left: 50,
-                      top: 50,
-                      // Le widget à positionner
-                      // Vous pouvez utiliser Image.asset ou Image.network comme avant
-                      child: Image.asset('assets/pp.jpg'),
+                      height: 228,
                     ),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 99.0),
+                    child: Positioned(
+                      child: Align(
+                        alignment: FractionalOffset.center,
+                        // La position du widget par rapport au centre du stack
+                        // Vous pouvez utiliser des valeurs positives ou négatives
+                        // Le widget à positionner
+                        // Vous pouvez utiliser Image.asset ou Image.network comme avant
+                        child: Stack(
+                          // L'alignement des widgets dans le stack
+                          alignment: Alignment.center,
+                          // La liste des widgets à afficher dans le stack
+                          children: <Widget>[
+                            // Le premier widget est en bas du stack
+                            // Vous pouvez utiliser Image.asset pour charger une image locale
+                            // Ou Image.network pour charger une image depuis une URL
+                            Image.asset('assets/Ellipse 21.png'),
+                            // Le deuxième widget est au-dessus du premier
+                            // Vous pouvez utiliser Positioned pour positionner le widget dans le stack
+                            Positioned(
+                              // La position du widget par rapport au centre du stack
+                              // Vous pouvez utiliser des valeurs positives ou négatives
+                              left: 15,
+                              top: 15,
+                              // Le widget à positionner
+                              // Vous pouvez utiliser Image.asset ou Image.network comme avant
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(200),
+                                child: Container(
+                                  child: Image.asset('assets/pp.jpg'),
+                                  width: 190,
+                                  height: 190,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        // Un widget Stack permet de superposer un widget sur un autre
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Container(
+                      child: Row(children: [
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                            child: Image.asset('assets/8 1.png'),
+                          ),
+                        ),
+                        Text(
+                          'Jason Kitio',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ]),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Container(
+                      child: Row(children: [
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                            child: Image.asset('assets/6.png'),
+                          ),
+                        ),
+                        Text(
+                          '6 96 35 41 28',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ]),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Container(
+                      child: Row(children: [
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                            child: Image.asset('assets/7.png'),
+                          ),
+                        ),
+                        Text(
+                          'kanamax00@gmail.com',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ]),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Container(
+                      child: Row(children: [
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                            child: Image.asset('assets/4 1.png'),
+                          ),
+                        ),
+                        Text(
+                          'Tache',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ]),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     ));

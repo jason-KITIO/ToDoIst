@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradient_text/flutter_gradient_text.dart';
-import 'package:todoist/Screens/home.dart';
+import 'package:todoist/Screens/GUI/HomeUsers.dart';
 import 'package:todoist/Screens/register.dart';
 
 import 'ForgetPassword.dart';
@@ -23,6 +23,11 @@ class _loginState extends State<login> {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwwordController.text.trim(),
+      );
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeUsers()),
       );
     } on FirebaseAuthException catch (e) {
       print(e);

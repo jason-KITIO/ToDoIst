@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradient_text/flutter_gradient_text.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,7 +16,51 @@ class register1 extends StatefulWidget {
 }
 
 class _register1State extends State<register1> {
-  void suivant() {
+  final _FullNameController = TextEditingController();
+  final _UserNameController = TextEditingController();
+
+  @override
+  void dispose() {
+    _FullNameController.dispose();
+    _UserNameController.dispose();
+    super.dispose();
+  }
+
+  Future suivant() async {
+    try {
+      addUserDetails(
+        _FullNameController.text.trim(),
+        _UserNameController.text.trim(),
+        // si on utilise un entier on aura
+        //int.parse(_FullNameController.text.trim()),
+      );
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => register2()),
+      );
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text("Nous recontrons un probleme de Connection\n"
+                  "  - Veillez vous rassurer d'avoir remplit tous les champs\n\n"
+                  "                     Merci de coopération "),
+            );
+          });
+    }
+  }
+
+  Future addUserDetails(String FullName, String Username) async {
+    await FirebaseFirestore.instance.collection('Users').add({
+      'Nom et prenom': FullName,
+      'Username': Username,
+    });
+  }
+
+  void suivant1() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => register2()),
@@ -121,7 +167,7 @@ class _register1State extends State<register1> {
                                         bottom: BorderSide(
                                             color: Colors.grey.shade200))),
                                 child: TextField(
-                                  //controller: _emailController,
+                                  controller: _FullNameController,
                                   decoration: InputDecoration(
                                       labelText: 'Nom et prenom',
                                       hintText: "Jason Kitio",
@@ -165,7 +211,7 @@ class _register1State extends State<register1> {
                                         bottom: BorderSide(
                                             color: Colors.grey.shade200))),
                                 child: TextField(
-                                  //controller: _passwwordController,
+                                  controller: _UserNameController,
                                   decoration: InputDecoration(
                                     labelText: 'Username',
                                     hintText: "Username",
