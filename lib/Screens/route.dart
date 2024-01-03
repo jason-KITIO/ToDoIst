@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todoist/Screens/GUI/add.dart';
+import 'package:todoist/Screens/GUI/search.dart';
+import 'package:todoist/Screens/GUI/tache.dart';
 
 import 'GUI/HomeUsers.dart';
 import 'GUI/home.dart';
@@ -13,6 +16,7 @@ class route extends StatelessWidget {
     return MaterialApp(
       title: 'Bottom Navigation Bar',
       home: MyHomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -27,9 +31,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final List<Widget> _pages = [
     home(),
-    home(),
-    home(),
-    home(),
+    SearchScreen(),
+    add(),
+    tache(),
     HomeUsers(),
   ];
 

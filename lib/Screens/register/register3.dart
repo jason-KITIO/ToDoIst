@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:todoist/Screens/GUI/HomeUsers.dart';
 import 'package:todoist/Screens/login.dart';
 import 'package:todoist/Screens/register/register2.dart';
+import 'package:todoist/Screens/route.dart';
 
 class register3 extends StatefulWidget {
   const register3({super.key});
@@ -22,7 +23,7 @@ class _register3State extends State<register3> {
     Navigator.of(context).pop();*/
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HomeUsers()),
+      MaterialPageRoute(builder: (context) => route()),
     );
   }
 

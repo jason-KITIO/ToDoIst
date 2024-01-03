@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gradient_text/flutter_gradient_text.dart';
 import 'package:todoist/Screens/GUI/HomeUsers.dart';
 import 'package:todoist/Screens/register.dart';
+import 'package:todoist/Screens/route.dart';
 
 import 'ForgetPassword.dart';
 import 'Start.dart';
@@ -27,7 +28,7 @@ class _loginState extends State<login> {
 
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomeUsers()),
+        MaterialPageRoute(builder: (context) => route()),
       );
     } on FirebaseAuthException catch (e) {
       print(e);
@@ -37,6 +38,7 @@ class _loginState extends State<login> {
             return AlertDialog(
               content: Text("Nous recontrons un probleme de Connection\n"
                   "  - Veillez vous rassurer d'avoir remplit tous les champs\n\n"
+                  "  - Veriifier votre connection internet\n\n"
                   "                     Merci de coopération "),
             );
           });

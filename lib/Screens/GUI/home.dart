@@ -41,15 +41,18 @@ class _homeState extends State<home> {
       appBar: AppBar(
         title: Text(user.email!),
         actions: [
-          GestureDetector(
-            onTap: () {
-              FirebaseAuth.instance.signOut();
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Start()),
-              );
-            },
-            child: Icon(Icons.logout_outlined),
+          Padding(
+            padding: EdgeInsets.only(right: 15.0),
+            child: GestureDetector(
+              onTap: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Start()),
+                );
+              },
+              child: Icon(Icons.logout_outlined),
+            ),
           )
         ],
       ),
@@ -57,14 +60,14 @@ class _homeState extends State<home> {
         child: Expanded(
           child: Column(
             children: [
-              Text('l\'utilisateur connecter a pour email : ' + user.email!),
+              /*Text('l\'utilisateur connecter a pour email : ' + user.email!),
               MaterialButton(
                 onPressed: () {
                   FirebaseAuth.instance.signOut();
                 },
                 color: Color(0x3F283576),
                 child: Text('Sign Out'),
-              ),
+              ),*/
               Expanded(
                   child: FutureBuilder(
                 future: getDocId(),

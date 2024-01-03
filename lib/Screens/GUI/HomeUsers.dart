@@ -32,6 +32,8 @@ class _homeState extends State<HomeUsers> {
             }));
   }
 
+// Définir une fonction qui prend en paramètre le nom de la collection
+
 /*
   @override
   void initState() {
@@ -196,10 +198,29 @@ class _homeState extends State<HomeUsers> {
                             child: Image.asset('assets/8 1.png'),
                           ),
                         ),
-                        Text(
-                          'Jason Kitio',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                        FutureBuilder(
+                          // Appeler la fonction afficherDonnees() ici
+                          future: afficherUsername(),
+                          // Définir le widget à afficher selon l'état du futur
+                          builder: (context, snapshot) {
+                            // Si le futur est terminé avec succès, afficher le widget Column retourné par la fonction
+                            if (snapshot.hasData) {
+                              return snapshot.data!;
+                            }
+                            // Si le futur est en attente, afficher un widget CircularProgressIndicator
+                            else if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            }
+                            // Si le futur a échoué, afficher un widget Text avec le message d'erreur
+                            else if (snapshot.hasError) {
+                              return Text('Erreur : ${snapshot.error}');
+                            }
+                            // Sinon, afficher un widget Text vide
+                            else {
+                              return Text('');
+                            }
+                          },
                         ),
                       ]),
                     ),
@@ -214,10 +235,29 @@ class _homeState extends State<HomeUsers> {
                             child: Image.asset('assets/6.png'),
                           ),
                         ),
-                        Text(
-                          '6 96 35 41 28',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                        FutureBuilder(
+                          // Appeler la fonction afficherDonnees() ici
+                          future: afficherFullName(),
+                          // Définir le widget à afficher selon l'état du futur
+                          builder: (context, snapshot) {
+                            // Si le futur est terminé avec succès, afficher le widget Column retourné par la fonction
+                            if (snapshot.hasData) {
+                              return snapshot.data!;
+                            }
+                            // Si le futur est en attente, afficher un widget CircularProgressIndicator
+                            else if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            }
+                            // Si le futur a échoué, afficher un widget Text avec le message d'erreur
+                            else if (snapshot.hasError) {
+                              return Text('Erreur : ${snapshot.error}');
+                            }
+                            // Sinon, afficher un widget Text vide
+                            else {
+                              return Text('');
+                            }
+                          },
                         ),
                       ]),
                     ),
@@ -233,7 +273,7 @@ class _homeState extends State<HomeUsers> {
                           ),
                         ),
                         Text(
-                          'kanamax00@gmail.com',
+                          user.email!,
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
@@ -261,10 +301,141 @@ class _homeState extends State<HomeUsers> {
                 ],
               ),
             ),
+            /*Center(
+              // Utiliser un widget FutureBuilder pour attendre le résultat de la fonction afficherDonnees()
+              child: FutureBuilder(
+                // Appeler la fonction afficherDonnees() ici
+                future: afficherUsername(),
+                // Définir le widget à afficher selon l'état du futur
+                builder: (context, snapshot) {
+                  // Si le futur est terminé avec succès, afficher le widget Column retourné par la fonction
+                  if (snapshot.hasData) {
+                    return snapshot.data!;
+                  }
+                  // Si le futur est en attente, afficher un widget CircularProgressIndicator
+                  else if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  }
+                  // Si le futur a échoué, afficher un widget Text avec le message d'erreur
+                  else if (snapshot.hasError) {
+                    return Text('Erreur : ${snapshot.error}');
+                  }
+                  // Sinon, afficher un widget Text vide
+                  else {
+                    return Text('');
+                  }
+                },
+              ),
+            ),*/
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      FirebaseAuth.instance.signOut();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Start()),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Container(
+                            child: Text(
+                              'Se Deconnecter',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                        Icon(Icons.logout_outlined),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
           ],
         ),
       ),
     ));
+  }
+
+  Future<Widget> afficherUsername() async {
+    // Obtenir l'utilisateur actuel et son email
+    final user = FirebaseAuth.instance.currentUser!;
+    final email = user.email!;
+
+    // Créer une requête sur la collection avec un filtre sur l'email
+    Query query = FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: email);
+
+    // Exécuter la requête et obtenir les documents
+    QuerySnapshot snapshot = await query.get();
+
+    // Créer une liste vide pour stocker les widgets Text
+    List<Widget> textWidgets = [];
+
+    // Parcourir les documents et ajouter un widget Text à la liste pour chaque champ "Username"
+    for (DocumentSnapshot document in snapshot.docs) {
+      // Obtenir le contenu du champ "Username"
+      String username = document.get("Username");
+      // Créer un widget Text avec le contenu du champ
+      Text textWidget = Text(
+        '$username',
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      );
+      // Ajouter le widget Text à la liste
+      textWidgets.add(textWidget);
+    }
+
+    // Retourner un widget Column qui contient tous les widgets Text de la liste
+    return Column(
+      children: textWidgets,
+    );
+  }
+
+  Future<Widget> afficherFullName() async {
+    // Obtenir l'utilisateur actuel et son email
+    final user = FirebaseAuth.instance.currentUser!;
+    final email = user.email!;
+
+    // Créer une requête sur la collection avec un filtre sur l'email
+    Query query = FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: email);
+
+    // Exécuter la requête et obtenir les documents
+    QuerySnapshot snapshot = await query.get();
+
+    // Créer une liste vide pour stocker les widgets Text
+    List<Widget> textWidgets = [];
+
+    // Parcourir les documents et ajouter un widget Text à la liste pour chaque champ "Username"
+    for (DocumentSnapshot document in snapshot.docs) {
+      // Obtenir le contenu du champ "Username"
+      String username = document.get("Nom et prenom");
+      // Créer un widget Text avec le contenu du champ
+      Text textWidget = Text(
+        '$username',
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      );
+      // Ajouter le widget Text à la liste
+      textWidgets.add(textWidget);
+    }
+
+    // Retourner un widget Column qui contient tous les widgets Text de la liste
+    return Column(
+      children: textWidgets,
+    );
   }
 }
 

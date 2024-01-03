@@ -18,6 +18,7 @@ class register1 extends StatefulWidget {
 class _register1State extends State<register1> {
   final _FullNameController = TextEditingController();
   final _UserNameController = TextEditingController();
+  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   void dispose() {
@@ -31,6 +32,7 @@ class _register1State extends State<register1> {
       addUserDetails(
         _FullNameController.text.trim(),
         _UserNameController.text.trim(),
+        user.email!,
         // si on utilise un entier on aura
         //int.parse(_FullNameController.text.trim()),
       );
@@ -53,10 +55,11 @@ class _register1State extends State<register1> {
     }
   }
 
-  Future addUserDetails(String FullName, String Username) async {
+  Future addUserDetails(String FullName, String Username, String email) async {
     await FirebaseFirestore.instance.collection('Users').add({
       'Nom et prenom': FullName,
       'Username': Username,
+      'email': email,
     });
   }
 
