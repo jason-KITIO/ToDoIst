@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
+import '../../google_auth_cubit.dart';
 import '../../read data/get_user_name.dart';
 import '../Start.dart';
 import '../register/register1.dart';
@@ -39,12 +42,14 @@ class _homeState extends State<home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(user.email!),
+        title: Text('Hello,'),
+        //title: Text('Hello, ${user.displayName}'),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 15.0),
             child: GestureDetector(
               onTap: () {
+                GoogleSignIn().signOut();
                 FirebaseAuth.instance.signOut();
                 Navigator.push(
                   context,

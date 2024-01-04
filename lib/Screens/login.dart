@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gradient_text/flutter_gradient_text.dart';
 import 'package:todoist/Screens/GUI/HomeUsers.dart';
 import 'package:todoist/Screens/register.dart';
 import 'package:todoist/Screens/route.dart';
+import 'package:todoist/google_auth_cubit.dart';
+import 'package:todoist/google_auth_state.dart';
 
 import 'ForgetPassword.dart';
 import 'Start.dart';
@@ -287,7 +290,22 @@ class _loginState extends State<login> {
                       SizedBox(
                         height: 20,
                       ),
-                      Row(
+                      BlocConsumer<GoogleAuthCubit, GoogleAuthState>(
+                        builder: (context, state) {
+                          return ElevatedButton(
+                            onPressed: state is GoogleAuthLoadingState
+                                ? null
+                                : () => context
+                                    .read<GoogleAuthCubit>()
+                                    .login(context),
+                            child: state is GoogleAuthLoadingState
+                                ? const CircularProgressIndicator()
+                                : const Text("Connexion avec Google"),
+                          );
+                        },
+                        listener: (context, state) {},
+                      ),
+                      /*Row(
                         children: <Widget>[
                           Expanded(
                             child: Container(
@@ -327,7 +345,7 @@ class _loginState extends State<login> {
                             ),
                           ),
                         ],
-                      ),
+                      ),*/
                       SizedBox(
                         height: 10,
                       ),

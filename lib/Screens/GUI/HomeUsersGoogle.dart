@@ -4,22 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:todoist/Screens/GUI/HomeUsersGoogle.dart';
+import 'package:todoist/Screens/GUI/HomeUsers.dart';
 import 'package:todoist/Screens/Start.dart';
 import 'package:todoist/Screens/register/register1.dart';
 import 'package:todoist/Screens/register/register3.dart';
+import 'package:todoist/Screens/route.dart';
 import 'package:todoist/read%20data/get_user_name.dart';
 
 import '../../model/add_date.dart';
 
-class HomeUsers extends StatefulWidget {
-  const HomeUsers({super.key});
+class HomeUsersGoogle extends StatefulWidget {
+  const HomeUsersGoogle({super.key});
 
   @override
-  State<HomeUsers> createState() => _homeState();
+  State<HomeUsersGoogle> createState() => _homeState();
 }
 
-class _homeState extends State<HomeUsers> {
+class _homeState extends State<HomeUsersGoogle> {
   final user = FirebaseAuth.instance.currentUser!;
 
   List<String> docIds = [];
@@ -169,7 +170,10 @@ class _homeState extends State<HomeUsers> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(200),
                                 child: Container(
-                                  child: Image.asset('assets/pp.jpg'),
+                                  child: Image.network(
+                                    '${user.photoURL}',
+                                    fit: BoxFit.cover,
+                                  ),
                                   width: 190,
                                   height: 190,
                                 ),
@@ -199,6 +203,11 @@ class _homeState extends State<HomeUsers> {
                           child: Container(
                             child: Image.asset('assets/8 1.png'),
                           ),
+                        ),
+                        Text(
+                          '${user.displayName}',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         FutureBuilder(
                           // Appeler la fonction afficherDonnees() ici
@@ -236,6 +245,25 @@ class _homeState extends State<HomeUsers> {
                           child: Container(
                             child: Image.asset('assets/6.png'),
                           ),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // If the user is signed in and has a phone number, show it
+                            if (user.phoneNumber != null)
+                              Text(
+                                '${user.phoneNumber}',
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                            // Otherwise, show a message
+                            if (user.phoneNumber == null)
+                              Text(
+                                'Numero de telephone introuvable',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              )
+                          ],
                         ),
                         FutureBuilder(
                           // Appeler la fonction afficherDonnees() ici
@@ -330,79 +358,41 @@ class _homeState extends State<HomeUsers> {
                 },
               ),
             ),*/
-            Column(children: [
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 25.0, vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          GoogleSignIn().signOut();
-                          FirebaseAuth.instance.signOut();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Start()),
-                          );
-                        },
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: Container(
-                                child: Text(
-                                  'Se Deconnecter',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey),
-                                ),
-                              ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      GoogleSignIn().signOut();
+                      FirebaseAuth.instance.signOut();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Start()),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Container(
+                            child: Text(
+                              'Se Deconnecter',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey),
                             ),
-                            Icon(Icons.logout_outlined),
-                          ],
+                          ),
                         ),
-                      ),
-                    ],
+                        Icon(Icons.logout_outlined),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 25.0, vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomeUsersGoogle()),
-                          );
-                        },
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: Container(
-                                child: Text(
-                                  'Google',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey),
-                                ),
-                              ),
-                            ),
-                            Icon(Icons.logout_outlined),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ])
-            ]),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -480,323 +470,391 @@ class _homeState extends State<HomeUsers> {
   }
 }
 
-/*
-class home extends StatefulWidget {
-  const home({Key? key}) : super(key: key);
-
-  @override
-  State<home> createState() => _HomeState();
-}
-
-class _HomeState extends State<home> {
-  var history;
-  final box = Hive.box<Add_data>('data');
-  final List<String> day = [
-    'Monday',
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    'friday',
-    'saturday',
-    'sunday'
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-          child: ValueListenableBuilder(
-              valueListenable: box.listenable(),
-              builder: (context, value, child) {
-                return CustomScrollView(
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: SizedBox(height: 340, child: _head()),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Transactions History',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 19,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Text(
-                              'See all',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          history = box.values.toList()[index];
-                          return getList(history, index);
-                        },
-                        childCount: box.length,
-                      ),
-                    )
-                  ],
-                );
-              })),
-    );
-  }
-
-  Widget getList(Add_data history, int index) {
-    return Dismissible(
-        key: UniqueKey(),
-        onDismissed: (Tab) {
-          history.delete();
-        },
-        child: get(index, history));
-  }
-
-  ListTile get(int index, Add_data history) {
-    return ListTile(
-      leading: ClipRRect(
-        borderRadius: BorderRadius.circular(5),
-        child: Image.asset('images/${history.name}.png', height: 40),
-      ),
-      title: Text(
-        history.name,
-        style: TextStyle(
-          fontSize: 17,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      subtitle: Text(
-        '${day[history.datetime.weekday - 1]}  ${history.datetime.year}-${history.datetime.day}-${history.datetime.month}',
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      trailing: Text(
-        history.amount,
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 19,
-          color: history.IN == 'Income' ? Colors.green : Colors.red,
-        ),
-      ),
-    );
-  }
-
-  Widget _head() {
-    return Stack(
-      children: [
-        Column(
-          children: [
-            Container(
-              width: double.infinity,
-              height: 240,
+/*Figma
+ Container(
+      width: 430,
+      height: 932,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(color: Colors.white),
+      child: Stack(
+        children: [
+          Positioned(
+            left: 0,
+            top: 859,
+            child: Container(
+              width: 430,
+              height: 73,
               decoration: BoxDecoration(
-                color: Color(0xff368983),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
-                ),
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    top: 35,
-                    left: 300,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(7),
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        color: Color.fromRGBO(250, 250, 250, 0.1),
-                        child: Icon(
-                          Icons.notification_add_outlined,
-                          size: 30,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 35, left: 30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Good afternoon',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            color: Color.fromARGB(255, 224, 223, 223),
-                          ),
-                        ),
-                        Text(
-                          'Enjelin Morgeana',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0x3F283576),
+                    blurRadius: 4,
+                    offset: Offset(0, -7),
+                    spreadRadius: 0,
                   )
                 ],
               ),
             ),
-          ],
-        ),
-        Positioned(
-          top: 140,
-          left: 20,
-          child: Container(
-            height: 170,
-            width: 320,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromRGBO(47, 125, 121, 0.3),
-                  offset: Offset(0, 6),
-                  blurRadius: 12,
-                  spreadRadius: 6,
-                ),
-              ],
-              color: Color.fromARGB(255, 47, 125, 121),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Column(
-              children: [
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Total Balance',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Icon(
-                        Icons.more_horiz,
-                        color: Colors.white,
-                      ),
-                    ],
+          ),
+          Positioned(
+            left: 333,
+            top: 821,
+            child: Container(
+              width: 87,
+              height: 87,
+              decoration: ShapeDecoration(
+                color: Color(0xFF283576),
+                shape: OvalBorder(),
+                shadows: [
+                  BoxShadow(
+                    color: Color(0x3F000000),
+                    blurRadius: 4,
+                    offset: Offset(5, -5),
+                    spreadRadius: 0,
                   ),
-                ),
-                SizedBox(height: 7),
-                Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: Row(
-                    children: [
-                      Text(
-                        'total',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
+                  BoxShadow(
+                    color: Color(0x3F000000),
+                    blurRadius: 4,
+                    offset: Offset(-5, -5),
+                    spreadRadius: 0,
                   ),
-                ),
-                SizedBox(height: 25),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 13,
-                            backgroundColor: Color.fromARGB(255, 85, 145, 141),
-                            child: Icon(
-                              Icons.arrow_downward,
-                              color: Colors.white,
-                              size: 19,
-                            ),
-                          ),
-                          SizedBox(width: 7),
-                          Text(
-                            'Income',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 216, 216, 216),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 13,
-                            backgroundColor: Color.fromARGB(255, 85, 145, 141),
-                            child: Icon(
-                              Icons.arrow_upward,
-                              color: Colors.white,
-                              size: 19,
-                            ),
-                          ),
-                          SizedBox(width: 7),
-                          Text(
-                            'Expenses',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 216, 216, 216),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                  BoxShadow(
+                    color: Color(0x3F000000),
+                    blurRadius: 4,
+                    offset: Offset(-5, 5),
+                    spreadRadius: 0,
                   ),
-                ),
-                SizedBox(height: 6),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'income',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 17,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        'expenses',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 17,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+                  BoxShadow(
+                    color: Color(0x3F000000),
+                    blurRadius: 4,
+                    offset: Offset(5, 5),
+                    spreadRadius: 0,
+                  )
+                ],
+              ),
             ),
           ),
-        )
-      ],
+          Positioned(
+            left: 49,
+            top: 880,
+            child: Container(
+              width: 29,
+              height: 31,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage("https://via.placeholder.com/29x31"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 363,
+            top: 849,
+            child: Container(
+              width: 27.76,
+              height: 31,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage("https://via.placeholder.com/28x31"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 216.39,
+            top: 874,
+            child: Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage("https://via.placeholder.com/42x42"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 147,
+            top: 881,
+            child: Container(
+              width: 31.39,
+              height: 31,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage("https://via.placeholder.com/31x31"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 296.39,
+            top: 881,
+            child: Container(
+              width: 28.45,
+              height: 31,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage("https://via.placeholder.com/28x31"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 0,
+            top: 0,
+            child: Container(
+              width: 430,
+              height: 237,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage("https://via.placeholder.com/430x237"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 113,
+            top: 99,
+            child: Container(
+              width: 201,
+              height: 201,
+              decoration: ShapeDecoration(
+                color: Colors.black,
+                shape: OvalBorder(),
+                shadows: [
+                  BoxShadow(
+                    color: Color(0x3F000000),
+                    blurRadius: 4,
+                    offset: Offset(5, -5),
+                    spreadRadius: 0,
+                  ),
+                  BoxShadow(
+                    color: Color(0x3F000000),
+                    blurRadius: 4,
+                    offset: Offset(-5, -5),
+                    spreadRadius: 0,
+                  ),
+                  BoxShadow(
+                    color: Color(0x3F000000),
+                    blurRadius: 4,
+                    offset: Offset(-5, 5),
+                    spreadRadius: 0,
+                  ),
+                  BoxShadow(
+                    color: Color(0x3F000000),
+                    blurRadius: 4,
+                    offset: Offset(5, 5),
+                    spreadRadius: 0,
+                  )
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            left: 21,
+            top: 337,
+            child: Container(
+              width: 27,
+              height: 31,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage("https://via.placeholder.com/27x31"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 21,
+            top: 535,
+            child: Container(
+              width: 27,
+              height: 31,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage("https://via.placeholder.com/27x31"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 363,
+            top: 160,
+            child: Container(
+              width: 50,
+              height: 50,
+              decoration: ShapeDecoration(
+                color: Colors.white.withOpacity(0.3700000047683716),
+                shape: OvalBorder(),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 373,
+            top: 169,
+            child: Container(
+              width: 31,
+              height: 31,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage("https://via.placeholder.com/31x31"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 85,
+            top: 344,
+            child: Text(
+              'Jason Kitio',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w700,
+                height: 0,
+              ),
+            ),
+          ),
+          Positioned(
+            left: 84,
+            top: 476,
+            child: Text(
+              'kanamax00@gmail.com',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w700,
+                height: 0,
+              ),
+            ),
+          ),
+          Positioned(
+            left: 85,
+            top: 410,
+            child: Text(
+              '+237 696 354 128',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w700,
+                height: 0,
+              ),
+            ),
+          ),
+          Positioned(
+            left: 84,
+            top: 539,
+            child: Text(
+              'Mes Taches',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w700,
+                height: 0,
+              ),
+            ),
+          ),
+          Positioned(
+            left: 194,
+            top: 751,
+            child: Text(
+              'Se Deconnecter',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w700,
+                height: 0,
+              ),
+            ),
+          ),
+          Positioned(
+            left: 119,
+            top: 105,
+            child: Container(
+              width: 189.74,
+              height: 190,
+              decoration: ShapeDecoration(
+                image: DecorationImage(
+                  image: NetworkImage("https://via.placeholder.com/190x190"),
+                  fit: BoxFit.fill,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 21,
+            top: 406,
+            child: Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage("https://via.placeholder.com/30x30"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 21,
+            top: 474,
+            child: Container(
+              width: 31,
+              height: 23,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage("https://via.placeholder.com/31x23"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 396,
+            top: 558,
+            child: Transform(
+              transform: Matrix4.identity()
+                ..translate(0.0, 0.0)
+                ..rotateZ(-3.14),
+              child: Container(
+                width: 15,
+                height: 15,
+                decoration: ShapeDecoration(
+                  color: Colors.black,
+                  shape: StarBorder.polygon(sides: 3),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 369,
+            top: 751,
+            child: Container(
+              width: 24,
+              height: 24,
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(),
+              child: Stack(children: []),
+            ),
+          ),
+        ],
+      ),
     );
-  }
-}
-*/
+ */

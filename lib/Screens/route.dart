@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todoist/Screens/GUI/HomeUsersGoogle.dart';
 import 'package:todoist/Screens/GUI/add.dart';
+import 'package:todoist/Screens/GUI/saisie.dart';
 import 'package:todoist/Screens/GUI/search.dart';
 import 'package:todoist/Screens/GUI/tache.dart';
 
@@ -33,8 +35,9 @@ class _MyHomePageState extends State<MyHomePage> {
     home(),
     SearchScreen(),
     add(),
+    saisie(),
     tache(),
-    HomeUsers(),
+    HomeUsersGoogle(),
   ];
 
   @override
@@ -66,6 +69,10 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.add),
             label: 'Ajouter',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.mic),
+            label: 'Saisie',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),

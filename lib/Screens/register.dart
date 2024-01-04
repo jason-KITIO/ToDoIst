@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gradient_text/flutter_gradient_text.dart';
 import 'package:todoist/Screens/login.dart';
 import 'package:todoist/Screens/register/register1.dart';
+
+import '../google_auth_cubit.dart';
+import '../google_auth_state.dart';
 
 class register extends StatefulWidget {
   const register({super.key});
@@ -330,22 +334,20 @@ class _registerState extends State<register> {
                       ),
                       Row(
                         children: <Widget>[
-                          Expanded(
-                            child: Container(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: Colors.blue,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Google",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
+                          BlocConsumer<GoogleAuthCubit, GoogleAuthState>(
+                            builder: (context, state) {
+                              return ElevatedButton(
+                                onPressed: state is GoogleAuthLoadingState
+                                    ? null
+                                    : () => context
+                                        .read<GoogleAuthCubit>()
+                                        .login(context),
+                                child: state is GoogleAuthLoadingState
+                                    ? const CircularProgressIndicator()
+                                    : const Text("Connexion avec Google"),
+                              );
+                            },
+                            listener: (context, state) {},
                           ),
                           SizedBox(
                             width: 30,
